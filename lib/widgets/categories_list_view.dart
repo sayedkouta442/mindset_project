@@ -1,33 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindset_project/manager/categories_cubit/categories_cubit.dart';
 
 class CategoriesListView extends StatelessWidget {
   const CategoriesListView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 5,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: EdgeInsets.only(
-              right: index == 4 ? 0 : 17,
-              left: index == 0 ? 0 : 17,
-              top: 8,
-              bottom: 8,
-            ),
-            child: GestureDetector(
-              onTap: () {},
-              child: CategoriesListViewItem(
-                image: categories[index]['image'],
-                color: categories[index]['color'],
-                title: categories[index]['title'],
+    return BlocProvider(
+      create: (_) => CategoriesCubit()..fetchCategories(),
+      child: BlocBuilder<CategoriesCubit, CategoriesState>(
+        builder: (context, state) {
+          if (state is CategoriesLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is CategoriesLoaded) {
+            return MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: state.categories.length,
+                itemBuilder: (context, index) {
+                  final category = state.categories[index];
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      right: index == state.categories.length - 1 ? 0 : 17,
+                      left: index == 0 ? 0 : 17,
+                      top: 8,
+                      bottom: 8,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        // handle category tap
+                      },
+                      child: CategoriesListViewItem(
+                        image: category['image'].toString(),
+                        color: category['color'],
+                        title: category['title'],
+                      ),
+                    ),
+                  );
+                },
               ),
-            ),
-          );
+            );
+          } else if (state is CategoriesError) {
+            return Center(child: Text('Error: ${state.message}'));
+          } else {
+            return const SizedBox.shrink();
+          }
         },
       ),
     );
@@ -55,7 +75,7 @@ class CategoriesListViewItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             color: color, //Constants.primaryColor.withOpacity(.05),
           ),
-          child: Image.asset(image),
+          child: Image.network(image),
         ),
         SizedBox(height: 8),
         Text(
@@ -71,31 +91,3 @@ class CategoriesListViewItem extends StatelessWidget {
     );
   }
 }
-
-List<Map<String, dynamic>> categories = [
-  {
-    'image': 'assets/images/food_service.png',
-    'color': Color(0xfff2eefd),
-    'title': 'Foods',
-  },
-  {
-    'image': 'assets/images/Gift-Surprise.png',
-    'color': Color(0xffcbddfb),
-    'title': 'Gift',
-  },
-  {
-    'image': 'assets/images/Spectacles.png',
-    'color': Color(0xfffae0cf),
-    'title': 'Fashion',
-  },
-  {
-    'image': 'assets/images/Game_Controller.png',
-    'color': Color(0xffdde1e8),
-    'title': 'Gadget',
-  },
-  {
-    'image': 'assets/images/WristWatch.png',
-    'color': Color(0xfffdf1e3),
-    'title': 'Accessory',
-  },
-];

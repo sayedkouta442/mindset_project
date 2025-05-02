@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindset_project/manager/product_cubit/product_cubit.dart';
+import 'package:mindset_project/manager/product_details_cubit.dart/product_details_cubit.dart';
 
-import 'package:mindset_project/navigation_bottom.dart';
+import 'package:mindset_project/views/navigation_bottom.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -19,9 +22,36 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: NavigationBottom(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ProductCubit>(
+          create: (context) => ProductCubit()..fetchProducts(),
+        ),
+        // BlocProvider<ProductCubit>(
+        //   create: (context) => ProductCubit()..fetchProducts(),
+        // ),
+        // BlocProvider<ProductCubit>(
+        //   create: (context) => ProductCubit()..fetchProducts(),
+        // ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: NavigationBottom(),
+      ),
     );
   }
 }
+
+
+
+/*
+MultiBlocProvider(
+        providers: [
+          BlocProvider<ProductCubit>(
+            create: (context) => ProductCubit()..fetchProducts(),
+          ),
+        ],
+        child: NavigationBottom(),
+      ),
+
+*/

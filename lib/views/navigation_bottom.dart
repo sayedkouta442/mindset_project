@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mindset_project/home_view.dart';
-import 'package:mindset_project/product_details_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindset_project/manager/product_cubit/product_cubit.dart';
+import 'package:mindset_project/views/cart_view.dart';
+import 'package:mindset_project/views/favorites.dart';
+import 'package:mindset_project/views/home_view.dart';
 
 class NavigationBottom extends StatefulWidget {
   const NavigationBottom({super.key});
@@ -12,13 +15,20 @@ class NavigationBottom extends StatefulWidget {
 class _NavigationBottomState extends State<NavigationBottom> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeView(),
-    SizedBox(),
-    ProductDetailScreen(),
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ProductCubit>().fetchProducts();
+    });
+  }
 
-    SizedBox(),
-    SizedBox(),
+  final List<Widget> _screens = [
+    const HomeView(),
+    FavoritesPage(),
+    CartPage(),
+    const SizedBox(),
+    const SizedBox(),
   ];
 
   void _onItemTapped(int index) {
