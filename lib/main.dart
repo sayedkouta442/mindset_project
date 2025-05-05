@@ -27,12 +27,6 @@ class MainApp extends StatelessWidget {
         BlocProvider<ProductCubit>(
           create: (context) => ProductCubit()..fetchProducts(),
         ),
-        // BlocProvider<ProductCubit>(
-        //   create: (context) => ProductCubit()..fetchProducts(),
-        // ),
-        // BlocProvider<ProductCubit>(
-        //   create: (context) => ProductCubit()..fetchProducts(),
-        // ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -41,17 +35,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-
-
-
-/*
-MultiBlocProvider(
-        providers: [
-          BlocProvider<ProductCubit>(
-            create: (context) => ProductCubit()..fetchProducts(),
-          ),
-        ],
-        child: NavigationBottom(),
-      ),
-
-*/

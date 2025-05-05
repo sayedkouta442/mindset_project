@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mindset_project/constants.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindset_project/constants.dart';
 import 'package:mindset_project/manager/cart_cubit/cart_cubit.dart';
 import 'package:mindset_project/manager/favorite_cubit/favorite_cubit.dart';
 import 'package:mindset_project/manager/product_details_cubit.dart/product_details_cubit.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String productId;
@@ -24,7 +18,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int _currentPage = 0;
   int _selectedColorIndex = 1;
   int _quantity = 1;
-
+  bool isTapped = false;
   void _incrementQuantity() {
     setState(() {
       _quantity++;
@@ -406,8 +400,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
 
               onPressed: () async {
-                final userId = 'f51fa768-b18e-48e2-822a-31c2e5a83109';
-
                 context.read<CartCubit>().addToCart(
                   productId: widget.productId,
                   userId: userId,
@@ -437,19 +429,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
               child: GestureDetector(
                 onTap: () async {
-                  final userId = 'f51fa768-b18e-48e2-822a-31c2e5a83109';
-
                   context.read<FavoritesCubit>().addToFavorites(
                     productId: widget.productId,
                     userId: userId,
                   );
+                  setState(() {
+                    isTapped = !isTapped;
+                  });
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Added to favorites')),
                   );
                 },
 
                 child: Icon(
-                  Icons.favorite_border,
+                  isTapped ? Icons.favorite : Icons.favorite_border_outlined,
                   color: Colors.purple.shade700,
                 ),
               ),
@@ -489,78 +482,3 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 }
-
-
-
-/*
- Widget _buildBottomControls() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(32),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildQuantitySelector(),
-            const Spacer(),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
-              onPressed: () {},
-              child: Row(
-                children: [
-                  Image.asset('assets/images/cart.png', color: Colors.white),
-                  const SizedBox(width: 6),
-                  const Text('Buy now', style: TextStyle(color: Colors.white)),
-                ],
-              ),
-            ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.purple.shade50,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(Icons.favorite_border, color: Colors.purple.shade700),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildQuantitySelector() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.purple),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        children: [
-          InkWell(
-            onTap: _decrementQuantity,
-            child: const Icon(Icons.remove, size: 20),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              '$_quantity',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
-          InkWell(
-            onTap: _incrementQuantity,
-            child: const Icon(Icons.add, size: 20),
-          ),
-        ],
-      ),
-    );
-  }
-
-
-*/

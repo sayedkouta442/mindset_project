@@ -17,7 +17,7 @@ class CategoriesHeader extends StatelessWidget {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Text('See All', style: TextStyle(color: Constants.primaryColor)),
+        Text('See All', style: TextStyle(color: primaryColor)),
       ],
     );
   }

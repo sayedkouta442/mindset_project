@@ -21,9 +21,9 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
       final response =
           await supabase.from('products').select().eq('id', productId).single();
 
-      if (response == null) {
-        throw Exception("Product not found.");
-      }
+      // if (response == null) {
+      //   throw Exception("Product not found.");
+      // }
 
       emit(ProductDetailsLoaded(response));
     } catch (e) {

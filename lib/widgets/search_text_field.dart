@@ -16,7 +16,7 @@ class SearchTextField extends StatelessWidget {
         contentPadding: EdgeInsets.all(12),
         prefixIcon: Image.asset(
           'assets/images/SearchBottom.png',
-          color: Constants.primaryColor,
+          color: primaryColor,
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide.none,

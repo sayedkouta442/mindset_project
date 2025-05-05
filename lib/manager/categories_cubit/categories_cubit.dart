@@ -17,17 +17,19 @@ class CategoriesCubit extends Cubit<CategoriesState> {
           .order('created_at');
 
       final categories =
-          response.map((cat) {
+          response.map<Map<String, dynamic>>((cat) {
             return {
               'title': cat['name'],
               'image': cat['icon_url'],
-              'color': Color(int.parse(cat['color'])), // '0xfff2eefd' -> Color
+              'color': Color(
+                int.parse(cat['color']),
+              ), // Ensure this is a valid color string
             };
           }).toList();
 
-      emit(CategoriesLoaded(categories));
+      if (!isClosed) emit(CategoriesLoaded(categories));
     } catch (e) {
-      emit(CategoriesError(e.toString()));
+      if (!isClosed) emit(CategoriesError(e.toString()));
     }
   }
 }

@@ -38,12 +38,8 @@ class ProductCategory extends StatelessWidget {
                       (_) =>
                           ProductDetailsCubit()..fetchProductDetails(productId),
                 ),
-                BlocProvider(
-                  create: (_) => CartCubit(supabase, Constants.userId),
-                ),
-                BlocProvider(
-                  create: (_) => FavoritesCubit(supabase, Constants.userId),
-                ),
+                BlocProvider(create: (_) => CartCubit(supabase, userId)),
+                BlocProvider(create: (_) => FavoritesCubit(supabase, userId)),
               ],
               child: ProductDetailScreen(productId: productId),
             ),
@@ -105,10 +101,7 @@ class ProductCategory extends StatelessWidget {
         Expanded(
           child: Text(
             '\$${product['price']}',
-            style: TextStyle(
-              color: Constants.primaryColor,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
           ),
         ),
         Image.asset('assets/images/cart2.png', width: 25, height: 25),
